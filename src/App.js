@@ -21,6 +21,7 @@ class App extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.renderNewQuote = this.renderNewQuote.bind(this);
   }
 
   handleChange(event) {
@@ -30,7 +31,8 @@ class App extends Component {
   handleSubmit(event) {
     if(!quotes.includes(this.state.value)){
       quotes.push(this.state.value);
-      this.setState({ quote: this.getQuote()});
+      //this.setState({ quote: this.getQuote()});
+      this.renderNewQuote();
 
       console.log(this.state.quote )
     }
@@ -38,6 +40,10 @@ class App extends Component {
     event.preventDefault();
   }
   
+  renderNewQuote(event) {
+    this.setState({ quote: this.getQuote()});
+    //event.preventDefault();
+  }
   persistQuotes() {
 
     localStorage.setItem('quotes', JSON.stringify(quotes));
@@ -63,6 +69,7 @@ class App extends Component {
 	  <input type="submit" value="Submit" />
 	</form>
 
+	  <button onClick={this.renderNewQuote} >Get new quote</button>
       </div>
     );
   }
