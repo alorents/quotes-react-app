@@ -7,7 +7,6 @@ const quotes = fromLocalStorage || require('./quotes.json');
 
 class App extends Component {
   getQuote() {
-    //return quotes;
     var index = Math.floor(Math.random() * quotes.length);
     console.log('getQuote' )
     console.log(quotes )
@@ -31,7 +30,6 @@ class App extends Component {
   handleSubmit(event) {
     if(!quotes.includes(this.state.value)){
       quotes.push(this.state.value);
-      //this.setState({ quote: this.getQuote()});
       this.renderNewQuote();
 
       console.log(this.state.quote )
