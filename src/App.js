@@ -42,7 +42,6 @@ class App extends Component {
   
   renderNewQuote(event) {
     this.setState({ quote: this.getQuote()});
-    //event.preventDefault();
   }
   persistQuotes() {
 
