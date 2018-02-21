@@ -8,19 +8,16 @@ const quotes = fromLocalStorage || require('./quotes.json');
 class App extends Component {
   getQuote() {
     var index = Math.floor(Math.random() * quotes.length);
-    console.log('getQuote' )
-    console.log(quotes )
-    console.log(index )
-    console.log(quotes[index])
     return quotes[index];
   }
+
   constructor(props) {
     super(props);
     this.state = {value: '', quote: this.getQuote()};
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.renderNewQuote = this.renderNewQuote.bind(this);
+    this.updateQuote = this.updateQuote.bind(this);
   }
 
   handleChange(event) {
@@ -30,17 +27,16 @@ class App extends Component {
   handleSubmit(event) {
     if(!quotes.includes(this.state.value)){
       quotes.push(this.state.value);
-      this.renderNewQuote();
-
-      console.log(this.state.quote )
+      this.updateQuote();
     }
     this.persistQuotes();
     event.preventDefault();
   }
   
-  renderNewQuote(event) {
+  updateQuote(event) {
     this.setState({ quote: this.getQuote()});
   }
+
   persistQuotes() {
 
     localStorage.setItem('quotes', JSON.stringify(quotes));
@@ -66,7 +62,7 @@ class App extends Component {
 	  <input type="submit" value="Submit" />
 	</form>
 
-	  <button onClick={this.renderNewQuote} >Get new quote</button>
+	  <button onClick={this.updateQuote} >Get new quote</button>
       </div>
     );
   }
