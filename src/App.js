@@ -16,6 +16,7 @@ class App extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.updateQuote = this.updateQuote.bind(this);
     this.removeQuote = this.removeQuote.bind(this);
   }
 
@@ -36,6 +37,11 @@ class App extends Component {
     event.preventDefault();
   }
   
+  updateQuote(event) {
+    const quotes = this.state.quotes;
+    this.setState({ quote: this.getQuote(quotes)});
+  }
+
   removeQuote(event, index) {
     const newQuotes = this.state.quotes.filter((x,i) => i !== index );
     this.setState({ 
@@ -82,11 +88,11 @@ class App extends Component {
 	  <input type="submit" value="Submit" />
 	</form>
 
+	  <button onClick={this.updateQuote} >Get new quote</button>
       <ul>{this.listQuotes()}</ul>
       </div>
     );
   }
-
 }
 
 export default App;
