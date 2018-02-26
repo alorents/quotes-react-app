@@ -3,21 +3,21 @@ import logo from './logo.svg';
 import './App.css';
 
 const fromLocalStorage = JSON.parse(localStorage.getItem('quotes'));
-const quotes = fromLocalStorage || require('./quotes.json');
+const QUOTES = fromLocalStorage || require('./quotes.json');
 
 class App extends Component {
-  getQuote() {
-    var index = Math.floor(Math.random() * quotes.length);
-    return quotes[index];
-  }
-
   constructor(props) {
     super(props);
-    this.state = {value: '', quote: this.getQuote()};
+    this.state = {
+      value: '', 
+      quotes: QUOTES,
+      quote: this.getQuote(QUOTES) 
+    };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.updateQuote = this.updateQuote.bind(this);
+    this.removeQuote = this.removeQuote.bind(this);
   }
 
   handleChange(event) {
@@ -25,21 +25,47 @@ class App extends Component {
   }
 
   handleSubmit(event) {
-    if(!quotes.includes(this.state.value)){
-      quotes.push(this.state.value);
-      this.updateQuote();
+    if(!this.state.quotes.includes(this.state.value)){
+      const newQuotes = this.state.quotes.concat(this.state.value);
+
+      this.setState({ 
+	quotes: newQuotes,  
+	quote: this.getQuote(newQuotes)
+      });
+      this.persistQuotes(newQuotes);
     }
-    this.persistQuotes();
     event.preventDefault();
   }
   
   updateQuote(event) {
-    this.setState({ quote: this.getQuote()});
+    const quotes = this.state.quotes;
+    this.setState({ quote: this.getQuote(quotes)});
   }
 
-  persistQuotes() {
+  removeQuote(event, index) {
+    const newQuotes = this.state.quotes.filter((x,i) => i !== index );
+    this.setState({ 
+      quotes: newQuotes,  
+      quote: this.getQuote(newQuotes)
+    });
+    this.persistQuotes(newQuotes);
+  }
 
-    localStorage.setItem('quotes', JSON.stringify(quotes));
+  getQuote(quotes) {
+    var index = Math.floor(Math.random() * quotes.length);
+    return quotes[index];
+  }
+
+  persistQuotes(newQuotes) {
+    localStorage.setItem('quotes', JSON.stringify(newQuotes));
+  }
+
+  listQuotes() {
+    return this.state.quotes.map((quote, index) => 
+      <li key={'quote'+index}>{quote}
+	<button key={'quote_button'+index} onClick={(event) => this.removeQuote(event, index)}>Remove</button>
+      </li>
+    );
   }
 
   render() {
@@ -63,6 +89,7 @@ class App extends Component {
 	</form>
 
 	  <button onClick={this.updateQuote} >Get new quote</button>
+      <ul>{this.listQuotes()}</ul>
       </div>
     );
   }
